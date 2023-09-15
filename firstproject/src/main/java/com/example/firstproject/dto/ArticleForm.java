@@ -1,9 +1,11 @@
 package com.example.firstproject.dto;
 
 import com.example.firstproject.entity.Article;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
+@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
 @ToString
 public class ArticleForm {
