@@ -5,6 +5,7 @@ package com.example.firstproject.controller;
 import com.example.firstproject.dto.ArticleForm;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.repository.ArticleRepository;
+import com.example.firstproject.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import java.util.Optional;
 @Slf4j
 @Controller
 public class ArticleController {
+
     @Autowired
     private ArticleRepository articleRepository;
     @GetMapping("/articles/new")
