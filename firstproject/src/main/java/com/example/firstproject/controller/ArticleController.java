@@ -5,13 +5,17 @@ package com.example.firstproject.controller;
 import com.example.firstproject.dto.ArticleForm;
 import com.example.firstproject.dto.CommentDto;
 import com.example.firstproject.entity.Article;
+import com.example.firstproject.entity.Comment;
 import com.example.firstproject.repository.ArticleRepository;
+import com.example.firstproject.repository.CommentRepository;
 import com.example.firstproject.service.ArticleService;
 import com.example.firstproject.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +34,8 @@ public class ArticleController {
     private ArticleRepository articleRepository;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private CommentRepository commentRepository;
     @GetMapping("/articles/new")
     public String newArticleForm(){
         return "articles/new";
@@ -93,14 +99,14 @@ public class ArticleController {
         //3. 수정 결과 페이지로 리다이렉트하기
         return "redirect:/articles/"+articleEntity.getId();
     }
+    @Transactional
     @GetMapping("/articles/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes rttr) {
-        log.info("삭제요청이 들어왔습니다.");
         // 1.삭제할 대상 가져오기
         Article target = articleRepository.findById(id).orElse(null);
-        log.info(target.toString());
         // 2.대상 엔티티 삭제하기
         if (target != null) {
+            commentRepository.deleteByArticleId(id);
             articleRepository.delete(target);
             rttr.addFlashAttribute("msg", "삭제되었습니다.");
         }
